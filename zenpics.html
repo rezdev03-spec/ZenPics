@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZenPics – wallpaper &amp; inspirasi gambar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f7f9; --surface:#ffffff; --ink:#111218; --muted:#6b6e7b; --line:#e2e3e9;
+  --btn:#111218; --btn-ink:#ffffff; --skeleton:#e7e8ee;
+  --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e0f14; --surface:#1a1c25; --ink:#f3f4f8; --muted:#9a9eae; --line:#2b2e3a;
+    --btn:#f3f4f8; --btn-ink:#0e0f14; --skeleton:#1d202b;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e0f14; --surface:#1a1c25; --ink:#f3f4f8; --muted:#9a9eae; --line:#2b2e3a;
+  --btn:#f3f4f8; --btn-ink:#0e0f14; --skeleton:#1d202b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 1rem/1.45 var(--font)}
+svg{width:1.4rem;height:1.4rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:.9rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between}
+header::after{content:"";position:absolute;left:0;right:0;top:100%;height:1.2rem;background:linear-gradient(var(--bg),transparent);pointer-events:none}
+.logo{margin:0;font:800 1.9rem/1 var(--font);letter-spacing:-.04em}
+.q-now{color:var(--muted);font-size:.9rem;max-width:45%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+main{padding:.6rem 1rem 7.5rem}
+.status{color:var(--muted);margin:0 0 1rem;font-size:.9rem}
+.status.error{color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ink);padding:.8rem 1rem;border-radius:.75rem}
+
+/* Grid masonry: minimal 2 kolom, bertambah di layar lebar, memanjang ke bawah sebanyak gambar yang ada */
+.grid{column-count:2;column-gap:1rem}
+@media (min-width:720px){.grid{column-count:3}}
+@media (min-width:1020px){.grid{column-count:4}}
+@media (min-width:1320px){.grid{column-count:5}}
+
+.pin{break-inside:avoid;margin:0 0 1.1rem;display:block}
+.thumb{display:block;width:100%;border-radius:1.4rem;overflow:hidden;background:var(--skeleton);cursor:zoom-in}
+.thumb:not(.ok){aspect-ratio:3/4}
+.thumb img{display:block;width:100%;height:auto;opacity:0;transition:opacity .3s}
+.thumb.ok img{opacity:1}
+.cap{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.55rem .35rem 0}
+.cap .t{font-weight:700;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.more{width:2rem;height:2rem;display:grid;place-items:center;border-radius:50%}
+.more:hover{background:var(--line)}
+.skel{break-inside:avoid;margin:0 0 1.1rem;border-radius:1.4rem;background:var(--skeleton);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* Navigasi melayang di bawah */
+nav.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:6;display:flex;gap:.7rem}
+nav.dock button{width:4rem;height:4rem;border-radius:1.3rem;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+nav.dock svg{width:1.7rem;height:1.7rem}
+
+dialog{border:0;border-radius:1.6rem;padding:0;width:min(92vw,34rem);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(8,10,20,.65)}
+.sheet{padding:1.1rem;display:grid;gap:.9rem}
+.sheet h2{margin:0;font:800 1.2rem var(--font)}
+.sheet img{width:100%;max-height:60vh;object-fit:contain;border-radius:1rem;background:var(--skeleton)}
+.btns{display:grid;gap:.5rem}
+.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem 1rem;border-radius:1rem;font-weight:700;background:var(--bg);border:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+input[type=search]{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:1rem;padding:.9rem 1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chips button{padding:.5rem .9rem;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:.9rem}
+.seg{display:flex;gap:.4rem}
+.seg button{flex:1;padding:.6rem 0;border-radius:.9rem;border:1px solid var(--line);background:var(--bg)}
+.seg button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.lbl{font-size:.85rem;color:var(--muted);margin:0 0 .4rem}
+
+.toast{position:fixed;left:50%;bottom:calc(6.5rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,1rem);background:var(--btn);color:var(--btn-ink);padding:.7rem 1.1rem;border-radius:999px;font-size:.9rem;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:20;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9.5 15.5c1.4 1.2 3.6 1.2 5 0"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></symbol>
+</svg>
+
+<header>
+  <h1 class="logo">ZenPics</h1>
+  <span class="q-now" id="qnow"></span>
+</header>
+
+<main>
+  <p class="status" id="status" role="status"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<nav class="dock" aria-label="Navigasi utama">
+  <button type="button" id="nHome" aria-label="Beranda"><svg><use href="#i-home"/></svg></button>
+  <button type="button" id="nSearch" aria-label="Cari"><svg><use href="#i-search"/></svg></button>
+  <button type="button" id="nSet" aria-label="Pengaturan"><svg><use href="#i-gear"/></svg></button>
+</nav>
+
+<!-- Cari -->
+<dialog id="dSearch">
+  <form class="sheet" id="f" method="dialog">
+    <h2>Cari gambar</h2>
+    <input id="q" type="search" placeholder="Misalnya: anime, kamar minimalis" aria-label="Kata kunci" autocomplete="off">
+    <div class="chips" id="chips"></div>
+    <button class="btn primary" type="submit">Cari</button>
+  </form>
+</dialog>
+
+<!-- Detail gambar -->
+<dialog id="dView">
+  <div class="sheet">
+    <img id="big" alt="" referrerpolicy="no-referrer">
+    <h2 id="cap"></h2>
+    <div class="btns">
+      <button type="button" class="btn primary" id="save"><svg><use href="#i-down"/></svg>Simpan ke perangkat</button>
+      <a class="btn" id="open" target="_blank" rel="noopener">Buka gambar asli</a>
+      <button type="button" class="btn" id="copy">Salin tautan</button>
+      <button type="button" class="btn" data-close>Tutup</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Pengaturan -->
+<dialog id="dSet">
+  <div class="sheet">
+    <h2>Pengaturan</h2>
+    <div><p class="lbl">Tema</p>
+      <div class="seg" id="segTheme">
+        <button type="button" data-v="auto">Otomatis</button><button type="button" data-v="light">Terang</button><button type="button" data-v="dark">Gelap</button>
+      </div></div>
+    <div><p class="lbl">Jumlah kolom</p>
+      <div class="seg" id="segCols">
+        <button type="button" data-v="0">Otomatis</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button>
+      </div></div>
+    <button type="button" class="btn" data-close>Selesai</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+// Ganti jika alamat API berubah. Kata kunci ditambahkan di akhir.
+const API = "https://api.nexray.eu.cc/search/pinterest?q=";
+// Dipakai hanya jika gambar tidak bisa diunduh langsung karena batasan CORS.
+const CORS_PROXY = "https://wsrv.nl/?url=";
+const SUGGEST = ["anime wallpaper","aesthetic","pemandangan","kucing","kamar minimalis","mobil","kopi"];
+const DEFAULT_Q = SUGGEST[0];
+
+const $ = id => document.getElementById(id);
+const grid = $("grid"), statusEl = $("status");
+let current = null, lastQ = DEFAULT_Q;
+
+/* ---------- Pengaturan (disimpan di browser) ---------- */
+const store = {
+  get(k, d){ try { return localStorage.getItem(k) ?? d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+function applyTheme(v){
+  v === "auto" ? document.documentElement.removeAttribute("data-theme") : document.documentElement.setAttribute("data-theme", v);
+  mark("segTheme", v);
+}
+function applyCols(v){
+  grid.style.columnCount = v === "0" ? "" : v;
+  mark("segCols", v);
+}
+function mark(id, v){ document.querySelectorAll("#" + id + " button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v))); }
+$("segTheme").onclick = e => { const v = e.target.dataset.v; if (v) { store.set("theme", v); applyTheme(v); } };
+$("segCols").onclick = e => { const v = e.target.dataset.v; if (v) { store.set("cols", v); applyCols(v); } };
+applyTheme(store.get("theme", "auto")); applyCols(store.get("cols", "0"));
+
+/* ---------- Toast & dialog ---------- */
+let tt;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2600); }
+document.querySelectorAll("dialog").forEach(d => d.addEventListener("click", e => { if (e.target === d || e.target.hasAttribute("data-close")) d.close(); }));
+
+/* ---------- Navigasi ---------- */
+$("nHome").onclick = () => { window.scrollTo({ top: 0, behavior: "smooth" }); if (lastQ !== DEFAULT_Q) search(DEFAULT_Q); };
+$("nSearch").onclick = () => { $("dSearch").showModal(); $("q").focus(); };
+$("nSet").onclick = () => $("dSet").showModal();
+SUGGEST.forEach(s => { const b = document.createElement("button"); b.type = "button"; b.textContent = s; b.onclick = () => { $("dSearch").close(); search(s); }; $("chips").appendChild(b); });
+$("f").addEventListener("submit", e => { e.preventDefault(); $("dSearch").close(); search($("q").value); });
+
+/* ---------- Baca respons API (format fleksibel) ---------- */
+const isImg = s => typeof s === "string" && /^https?:\/\//i.test(s) && (/\.(jpe?g|png|webp|gif)(\?|$)/i.test(s) || /pinimg|image|img|photo/i.test(s));
+function findList(n){
+  if (Array.isArray(n) && n.length) return n;
+  if (n && typeof n === "object") for (const k of Object.keys(n)) { const r = findList(n[k]); if (r) return r; }
+  return null;
+}
+function findImg(n, d = 0){
+  if (isImg(n)) return n;
+  if (d > 4 || !n || typeof n !== "object") return null;
+  for (const k of Object.keys(n)) { const r = findImg(n[k], d + 1); if (r) return r; }
+  return null;
+}
+function toPins(json){
+  return (findList(json) || []).map(x => {
+    const src = findImg(x); if (!src) return null;
+    const o = typeof x === "object" ? x : {};
+    const text = o.title || o.caption || o.description || o.grid_title || o.name || "";
+    const link = typeof o.link === "string" ? o.link : (typeof o.url === "string" && !isImg(o.url) ? o.url : "");
+    return { src, text: String(text).trim().slice(0, 140), link };
+  }).filter(Boolean);
+}
+
+/* ---------- Cari & tampilkan ---------- */
+function skeletons(){
+  grid.innerHTML = "";
+  [260,330,200,300,360,220,310,250,340,210].forEach(h => { const d = document.createElement("div"); d.className = "skel"; d.style.height = h + "px"; grid.appendChild(d); });
+}
+async function search(term){
+  term = term.trim();
+  if (!term) { statusEl.textContent = "Ketik kata kunci dulu untuk mulai mencari."; return; }
+  lastQ = term; $("qnow").textContent = term;
+  statusEl.className = "status"; statusEl.textContent = "Mencari “" + term + "”…";
+  skeletons();
+  try {
+    const res = await fetch(API + encodeURIComponent(term));
+    if (!res.ok) throw new Error("status " + res.status);
+    const pins = toPins(await res.json());
+    grid.innerHTML = "";
+    if (!pins.length) { statusEl.textContent = "Tidak ada hasil untuk “" + term + "”. Coba kata kunci lain."; return; }
+    statusEl.textContent = pins.length + " gambar";
+    pins.forEach(p => grid.appendChild(card(p)));
+  } catch (e) {
+    grid.innerHTML = "";
+    statusEl.className = "status error";
+    statusEl.textContent = "Gagal memuat gambar (" + e.message + "). Periksa koneksi, lalu coba cari lagi. Jika file ini dibuka langsung dari folder, jalankan lewat server lokal atau hosting.";
+  }
+}
+function card(p){
+  const w = document.createElement("figure"); w.className = "pin"; w.style.margin = "0 0 1.1rem";
+  const b = document.createElement("button"); b.type = "button"; b.className = "thumb"; b.setAttribute("aria-label", p.text || "Lihat gambar");
+  const img = new Image(); img.loading = "lazy"; img.alt = p.text; img.referrerPolicy = "no-referrer";
+  img.onload = () => b.classList.add("ok"); img.onerror = () => w.remove(); img.src = p.src;
+  b.appendChild(img); b.onclick = () => show(p);
+  const cap = document.createElement("div"); cap.className = "cap";
+  const t = document.createElement("span"); t.className = "t"; t.textContent = p.text || "Tanpa judul";
+  const m = document.createElement("button"); m.type = "button"; m.className = "more"; m.setAttribute("aria-label", "Opsi gambar"); m.innerHTML = '<svg><use href="#i-dots"/></svg>'; m.onclick = () => show(p);
+  cap.append(t, m); w.append(b, cap);
+  return w;
+}
+function show(p){
+  current = p;
+  $("big").src = p.src; $("big").alt = p.text; $("cap").textContent = p.text || "Tanpa judul";
+  $("open").href = p.link || p.src;
+  $("dView").showModal();
+}
+
+/* ---------- Simpan ke perangkat ---------- */
+const slug = s => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+async function getBlob(url){
+  try { const r = await fetch(url, { referrerPolicy: "no-referrer" }); if (r.ok) return await r.blob(); } catch {}
+  const r2 = await fetch(CORS_PROXY + encodeURIComponent(url)); // cadangan jika CORS memblokir
+  if (!r2.ok) throw new Error("gagal");
+  return await r2.blob();
+}
+$("save").onclick = async () => {
+  if (!current) return;
+  toast("Mengunduh gambar…");
+  try {
+    const blob = await getBlob(current.src);
+    const ext = ((blob.type || "image/jpeg").split("/")[1] || "jpg").replace("jpeg", "jpg").split("+")[0];
+    const name = (slug(current.text) || "zenpics") + "-" + Date.now() + "." + ext;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    toast("Tersimpan ke perangkat");
+  } catch {
+    window.open(current.src, "_blank", "noopener");
+    toast("Tekan lama gambar, lalu pilih Simpan gambar");
+  }
+};
+$("copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(current.link || current.src); toast("Tautan disalin"); }
+  catch { toast("Gagal menyalin tautan"); }
+};
+
+search(DEFAULT_Q);
+</script>
+</body>
+</html>
